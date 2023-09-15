@@ -17,6 +17,20 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidUpdate(_, prevState) {
+    if (prevState.contacts.length !== this.state.contacts.length) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
+  componentDidMount() {
+    const contactsStor = localStorage.getItem('contacts');
+    const contactsStorParsed = JSON.parse(contactsStor);
+    if (contactsStorParsed) {
+      this.setState({ contacts: contactsStorParsed });
+    }
+  }
+
   createContact = dataByForm => {
     const isAlreadyExist = this.state.contacts.find(
       el => el.name === dataByForm.name
